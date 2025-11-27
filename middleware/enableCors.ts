@@ -3,8 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Cors from "cors";
 
 const cors = Cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH","OPTIONS"],
+  origin: "*", // semua domain diizinkan
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 });
 
@@ -19,12 +19,24 @@ function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) 
   });
 }
 
-export function enableCors(handler: (req: NextApiRequest, res: NextApiResponse) => any) {
+export function enableCors(
+  handler: (req: NextApiRequest, res: NextApiResponse) => any
+) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    // jalankan CORS
+    // Jalankan CORS
     await runMiddleware(req, res, cors);
 
-    // lanjut ke handler asli
+    // Tambahan manual header agar Next.js aman
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, Accept"
+    );
+
     return handler(req, res);
   };
 }
