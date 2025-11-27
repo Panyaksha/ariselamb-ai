@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: "uid parameter is required" });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
     const response = await fetch(`${baseUrl}/api/riwayat-gejala-user?uid=${uid}`);
 
     if (!response.ok) {
