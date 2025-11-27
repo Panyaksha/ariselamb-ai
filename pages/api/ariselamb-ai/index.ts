@@ -2,12 +2,13 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { GoogleGenAI } from "@google/genai";
+import { enableCors } from "@/middleware/enableCors";
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY!,
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -66,3 +67,5 @@ Berikan jawaban yang singkat, jelas, dan aman untuk kesehatan.
     });
   }
 }
+
+export default enableCors(handler);

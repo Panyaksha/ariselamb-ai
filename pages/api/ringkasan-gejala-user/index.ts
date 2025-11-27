@@ -1,8 +1,9 @@
 // @/pages/api/ringkasan-gejala-user/index.ts
 
 import type { NextApiRequest, NextApiResponse } from "next";
+import { enableCors } from "@/middleware/enableCors";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { uid } = req.query;
 
@@ -42,3 +43,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+export default enableCors(handler);
